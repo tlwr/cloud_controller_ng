@@ -41,7 +41,6 @@ RSpec.describe 'Deployments' do
 
         expect(parsed_response).to be_a_response_like({
           'guid' => deployment.guid,
-          'state' => VCAP::CloudController::DeploymentModel::DEPLOYING_STATE,
           'status' => {
             'value' => VCAP::CloudController::DeploymentModel::ACTIVE_STATUS_VALUE,
             'reason' => VCAP::CloudController::DeploymentModel::DEPLOYING_STATUS_REASON,
@@ -112,7 +111,6 @@ RSpec.describe 'Deployments' do
 
         expect(parsed_response).to be_a_response_like({
           'guid' => deployment.guid,
-          'state' => VCAP::CloudController::DeploymentModel::DEPLOYING_STATE,
           'status' => {
             'value' => VCAP::CloudController::DeploymentModel::ACTIVE_STATUS_VALUE,
             'reason' => VCAP::CloudController::DeploymentModel::DEPLOYING_STATUS_REASON,
@@ -190,7 +188,6 @@ RSpec.describe 'Deployments' do
 
         expect(parsed_response).to be_a_response_like({
           'guid' => deployment.guid,
-          'state' => VCAP::CloudController::DeploymentModel::DEPLOYING_STATE,
           'status' => {
             'value' => VCAP::CloudController::DeploymentModel::ACTIVE_STATUS_VALUE,
             'reason' => VCAP::CloudController::DeploymentModel::DEPLOYING_STATUS_REASON,
@@ -299,7 +296,6 @@ RSpec.describe 'Deployments' do
 
         expect(parsed_response).to be_a_response_like({
           'guid' => deployment.guid,
-          'state' => VCAP::CloudController::DeploymentModel::DEPLOYING_STATE,
           'status' => {
             'value' => VCAP::CloudController::DeploymentModel::ACTIVE_STATUS_VALUE,
             'reason' => VCAP::CloudController::DeploymentModel::DEPLOYING_STATUS_REASON,
@@ -372,7 +368,6 @@ RSpec.describe 'Deployments' do
         parsed_response = MultiJson.load(last_response.body)
         expect(parsed_response).to be_a_response_like({
           'guid' => deployment.guid,
-          'state' => VCAP::CloudController::DeploymentModel::DEPLOYING_STATE,
           'status' => {
             'value' => VCAP::CloudController::DeploymentModel::ACTIVE_STATUS_VALUE,
             'reason' => VCAP::CloudController::DeploymentModel::DEPLOYING_STATUS_REASON,
@@ -448,7 +443,6 @@ RSpec.describe 'Deployments' do
 
         expect(parsed_response).to be_a_response_like({
           'guid' => deployment.guid,
-          'state' => VCAP::CloudController::DeploymentModel::DEPLOYED_STATE,
           'status' => {
             'value' => VCAP::CloudController::DeploymentModel::FINALIZED_STATUS_VALUE,
             'reason' => VCAP::CloudController::DeploymentModel::DEPLOYED_STATUS_REASON,
@@ -613,7 +607,6 @@ RSpec.describe 'Deployments' do
 
           expect(parsed_response).to be_a_response_like({
             'guid' => deployment.guid,
-            'state' => VCAP::CloudController::DeploymentModel::DEPLOYING_STATE,
             'status' => {
               'value' => VCAP::CloudController::DeploymentModel::ACTIVE_STATUS_VALUE,
               'reason' => VCAP::CloudController::DeploymentModel::DEPLOYING_STATUS_REASON,
@@ -669,7 +662,6 @@ RSpec.describe 'Deployments' do
 
           expect(parsed_response).to be_a_response_like({
             'guid' => deployment.guid,
-            'state' => VCAP::CloudController::DeploymentModel::DEPLOYING_STATE,
             'status' => {
               'value' => VCAP::CloudController::DeploymentModel::ACTIVE_STATUS_VALUE,
               'reason' => VCAP::CloudController::DeploymentModel::DEPLOYING_STATUS_REASON,
@@ -782,7 +774,6 @@ RSpec.describe 'Deployments' do
       parsed_response = MultiJson.load(last_response.body)
       expect(parsed_response).to be_a_response_like({
         'guid' => deployment.guid,
-        'state' => VCAP::CloudController::DeploymentModel::DEPLOYING_STATE,
         'status' => {
           'value' => VCAP::CloudController::DeploymentModel::ACTIVE_STATUS_VALUE,
           'reason' => VCAP::CloudController::DeploymentModel::DEPLOYING_STATUS_REASON,
@@ -840,7 +831,6 @@ RSpec.describe 'Deployments' do
       parsed_response = MultiJson.load(last_response.body)
       expect(parsed_response).to be_a_response_like({
         'guid' => deployment.guid,
-        'state' => VCAP::CloudController::DeploymentModel::DEPLOYING_STATE,
         'status' => {
           'value' => VCAP::CloudController::DeploymentModel::ACTIVE_STATUS_VALUE,
           'reason' => VCAP::CloudController::DeploymentModel::DEPLOYING_STATUS_REASON,
@@ -945,10 +935,9 @@ RSpec.describe 'Deployments' do
         status_reason: VCAP::CloudController::DeploymentModel::SUPERSEDED_STATUS_REASON)
       }
 
-      def json_for_deployment(deployment, app_model, droplet, state, status_value, status_reason)
+      def json_for_deployment(deployment, app_model, droplet, status_value, status_reason)
         {
           guid: deployment.guid,
-          state: state,
           status: {
             value: status_value,
             reason: status_reason,
@@ -1015,11 +1004,9 @@ RSpec.describe 'Deployments' do
           },
           resources: [
             json_for_deployment(deployment, app_model, droplet,
-              VCAP::CloudController::DeploymentModel::DEPLOYING_STATE,
               VCAP::CloudController::DeploymentModel::ACTIVE_STATUS_VALUE,
               VCAP::CloudController::DeploymentModel::DEPLOYING_STATUS_REASON),
             json_for_deployment(deployment2, app2, droplet2,
-              VCAP::CloudController::DeploymentModel::CANCELING_STATE,
               VCAP::CloudController::DeploymentModel::ACTIVE_STATUS_VALUE,
               VCAP::CloudController::DeploymentModel::CANCELING_STATUS_REASON),
           ]
@@ -1038,15 +1025,12 @@ RSpec.describe 'Deployments' do
               code: 200,
               response_objects: [
                 json_for_deployment(deployment3, app3, droplet3,
-                  VCAP::CloudController::DeploymentModel::DEPLOYED_STATE,
                   VCAP::CloudController::DeploymentModel::FINALIZED_STATUS_VALUE,
                   VCAP::CloudController::DeploymentModel::DEPLOYED_STATUS_REASON),
                 json_for_deployment(deployment4, app4, droplet4,
-                  VCAP::CloudController::DeploymentModel::CANCELED_STATE,
                   VCAP::CloudController::DeploymentModel::FINALIZED_STATUS_VALUE,
                   VCAP::CloudController::DeploymentModel::CANCELED_STATUS_REASON),
                 json_for_deployment(deployment5, app5, droplet5,
-                  VCAP::CloudController::DeploymentModel::DEPLOYED_STATE,
                   VCAP::CloudController::DeploymentModel::FINALIZED_STATUS_VALUE,
                   VCAP::CloudController::DeploymentModel::SUPERSEDED_STATUS_REASON),
               ]
@@ -1089,11 +1073,9 @@ RSpec.describe 'Deployments' do
               code: 200,
               response_objects: [
                 json_for_deployment(deployment3, app3, droplet3,
-                  VCAP::CloudController::DeploymentModel::DEPLOYED_STATE,
                   VCAP::CloudController::DeploymentModel::FINALIZED_STATUS_VALUE,
                   VCAP::CloudController::DeploymentModel::DEPLOYED_STATUS_REASON),
                 json_for_deployment(deployment5, app5, droplet5,
-                  VCAP::CloudController::DeploymentModel::DEPLOYED_STATE,
                   VCAP::CloudController::DeploymentModel::FINALIZED_STATUS_VALUE,
                   VCAP::CloudController::DeploymentModel::SUPERSEDED_STATUS_REASON),
               ]
@@ -1136,7 +1118,6 @@ RSpec.describe 'Deployments' do
               code: 200,
               response_objects: [
                 json_for_deployment(deployment, app_model, droplet,
-                  VCAP::CloudController::DeploymentModel::DEPLOYING_STATE,
                   VCAP::CloudController::DeploymentModel::ACTIVE_STATUS_VALUE,
                   VCAP::CloudController::DeploymentModel::DEPLOYING_STATUS_REASON),
               ]
@@ -1239,7 +1220,6 @@ RSpec.describe 'Deployments' do
           'resources' => [
             {
               'guid' => deployment.guid,
-              'state' => VCAP::CloudController::DeploymentModel::DEPLOYING_STATE,
               'status' => {
                 'value' => VCAP::CloudController::DeploymentModel::ACTIVE_STATUS_VALUE,
                 'reason' => VCAP::CloudController::DeploymentModel::DEPLOYING_STATUS_REASON,
@@ -1300,7 +1280,6 @@ RSpec.describe 'Deployments' do
 
         expect(last_response.body).to be_empty
         deployment.reload
-        expect(deployment.state).to eq(VCAP::CloudController::DeploymentModel::CANCELING_STATE)
         expect(deployment.status_value).to eq(VCAP::CloudController::DeploymentModel::ACTIVE_STATUS_VALUE)
         expect(deployment.status_reason).to eq(VCAP::CloudController::DeploymentModel::CANCELING_STATUS_REASON)
 
@@ -1309,7 +1288,6 @@ RSpec.describe 'Deployments' do
         require 'cloud_controller/deployment_updater/scheduler'
         VCAP::CloudController::DeploymentUpdater::Updater.new(deployment, Steno.logger('blah')).cancel
         deployment.reload
-        expect(deployment.state).to eq(VCAP::CloudController::DeploymentModel::CANCELED_STATE)
         expect(deployment.status_value).to eq(VCAP::CloudController::DeploymentModel::FINALIZED_STATUS_VALUE)
         expect(deployment.status_reason).to eq(VCAP::CloudController::DeploymentModel::CANCELED_STATUS_REASON)
       end
