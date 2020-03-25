@@ -40,7 +40,8 @@ class ServiceInstancesV3Controller < ApplicationController
               end
 
     decorators = []
-    decorators << FieldIncludeServiceInstanceSpaceOrganizationDecorator if FieldIncludeServiceInstanceSpaceOrganizationDecorator.match?(message.fields)
+    decorators << FieldIncludeServiceInstanceSpaceOrganizationDecorator.new(message.fields) if FieldIncludeServiceInstanceSpaceOrganizationDecorator.match?(message.fields)
+    decorators << FieldServiceInstanceOrganizationDecorator.new(message.fields) if FieldServiceInstanceOrganizationDecorator.match?(message.fields)
 
     render status: :ok, json: Presenters::V3::PaginatedListPresenter.new(
       presenter: Presenters::V3::ServiceInstancePresenter,

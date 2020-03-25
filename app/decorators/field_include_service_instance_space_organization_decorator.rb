@@ -1,38 +1,36 @@
 module VCAP::CloudController
   class FieldIncludeServiceInstanceSpaceOrganizationDecorator
-    class << self
-      def match?(fields)
-        fields.is_a?(Hash) && fields[:'space.organization'] == ['name']
+      def self.match?(fields)
+        fields.is_a?(Hash) && fields[:space]&.to_set&.intersect?(self.allowed)
+      end
+
+      def self.allowed
+         Set['guid', 'relationship.organization']
+      end
+
+      def initialize(fields)
+        @fields = fields[:space].to_set.intersection(self.class.allowed)
       end
 
       def decorate(hash, service_instances)
         hash[:included] ||= {}
         spaces = service_instances.map(&:space).uniq
-        orgs = spaces.map(&:organization).uniq
 
         hash[:included][:spaces] = spaces.sort_by(&:created_at).map do |space|
-          {
-            name: space.name,
-            guid: space.guid,
-            relationships: {
+          temp = {}
+          temp[:guid] = space.guid if @fields.include?('guid')
+          temp[:relationships] =
+            {
               organization: {
                 data: {
                   guid: space.organization.guid
                 }
               }
-            }
-          }
-        end
-
-        hash[:included][:organizations] = orgs.sort_by(&:created_at).map do |org|
-          {
-            name: org.name,
-            guid: org.guid
-          }
+            } if @fields.include?('relationship.organization')
+          temp
         end
 
         hash
       end
     end
-  end
 end
