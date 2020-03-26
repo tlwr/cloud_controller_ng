@@ -3,7 +3,7 @@ require 'decorators/field_service_instance_organization_decorator'
 
 module VCAP::CloudController
   RSpec.describe FieldServiceInstanceOrganizationDecorator do
-    describe '.decorate' do
+  describe '.decorate' do
       let(:org1) { Organization.make }
       let(:org2) { Organization.make }
 
